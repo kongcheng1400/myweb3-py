@@ -5,6 +5,7 @@
   - int, uint, uint256
   - address: 20bytes. 有成员变量.
     - payable
+  - string:
 ## 引用类型(reference type): 数组和结构体.
   - bytes
     - 定长, 数值类型: byte, bytes1, bytes8, bytes32
@@ -69,6 +70,19 @@ Student student;
 全局变量:
 - solidity预留关键字，它们可以在函数内不声明直接使用:
 - msg.sender, block.number, msg.data,
+
+#### 全局变量-以太单位与时间单位.
+
+solidity中不存在小数点， 以0代题为小数点， 利用以太单位可以避免误算的问题.
+wei, gwei, ether.
+
+时间单位:
+seconds: 1
+minutes: 60 seconds = 60
+hours: 60 minutes = 3600
+days: 24hours = 86400
+
+
 
 ## constant和immutable
 - 只有数值变量可以声明constant和immutable; string和bytes可以声明为constant, 但不能为immutable.
@@ -135,3 +149,40 @@ Student student;
 - require: 0.8之前抛出异常的方法: gas随着描述异常的字符串的长度增加，比error命令要高。使用方法 require(检查条件， "异常的描述")
 - assert: 不知道异常信息.
 
+
+
+## 库合约
+库函数是一种特殊的合约，为了提升solidity 代码的复用性和减少gas而存在。库合约一般都是一些好用的函数合集(库函数)
+1. 不能存在状态变量
+2. 不能够继承或者被继承.
+3. 不能接收以太币.
+4. 不可以被销毁.
+
+### 使用
+using for 指令: using A for B;
+或者通过库合约名屌用库函数.
+String: 将uint256转换为String
+Address: 判断某个地址是否为合约地址
+Create2:更安全的使用Create2 EVM opcode
+Arrays: 跟数组相关的库函数.
+
+## import
+利用import导入其他合约中的全局符号(外部源代码)
+
+## 接收 ETH recieve和fallback
+0.6.4版本之前，只有fallback()函数。0.6之后solidity才将fallback()函数拆分成receive()和fallback()两个函数.
+solidity支持两种特殊的回调函数: receive()和fallback().
+1. 接收ETH
+2. 处理合约中不存在的函数调用.(代理合约 proxy contract)
+
+### recieve
+只用于处理接收ETH.
+- 一个合约最多只有一个receive()函数，声明方式与一般函数不一样，不需要function关键字:
+- recieve() external payable {...} 不能有参数，不能有返回值，必须包含external和payable
+
+### fallback
+在屌用合约不存在的函数时被触发。可用于接收ETH,
+- 必须由external 
+
+## send ETH
+transfer(), send(), call() 其中call()是被鼓励的用法.
