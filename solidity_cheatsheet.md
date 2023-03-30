@@ -221,3 +221,26 @@ abi.encodeWithSignature("f(uint256,address)", _x, _addr)
 ## 合约中创建合约
 create和create2.
 Contract x = new Contract{value: _value}(params)
+
+create2:
+使我们在智能合约部署在以太坊网络之前就能预测合约的地址：
+
+create的新合约的地址: = hash(创建者地址，nonce)
+
+create2: = hash("0xFF", 创建者地址，salt, bytecode): 如果创建者使用create2
+Contract x = new Contract{salt: _salt, value: _value}(params)
+
+## ABI编码解码
+编码:abi.encode, abi.encodePacked, abi.encodeWithSignature, abi.encodeWithSelector.
+解码: abi.decode, 
+encode: ABI被设计出来跟智能合约交互， 他将每个参数填充为32byte的数据，并拼接在一起.
+encodePacked: 省略了很多0. 节省空间不与合约交互，例如算一些数据的hash时。
+encodewithSignature: 第一个参数为函数签名:低昂调用其他合约可以使用。在encode前面加了选择器.
+### 使用场景:
+1. ABI场配合call来实现对合约的底层带哦用.
+address(contract).staticcall(data)
+2. ethers.js常用ABI实现合约的导入和函数的调用.
+
+const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+const waves = await wavePortalContract.getAllWaves();
+3. 对不开源合约进行反编译后，某些函数无法查到函数签名，可以通过ABI进行调用.
