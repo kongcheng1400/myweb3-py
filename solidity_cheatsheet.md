@@ -1,3 +1,12 @@
+# ethereum
+## transactions
+- from: address (signed by this)
+- to: address
+- value: uint(ether)
+- data: message data bytes.
+开始的4字节数据是函数选择器, 然后是参数.
+
+
 # 变量.
 - 初始值为0.
 ## 数值类型(value type): 
@@ -186,3 +195,13 @@ solidity支持两种特殊的回调函数: receive()和fallback().
 
 ## send ETH
 transfer(), send(), call() 其中call()是被鼓励的用法.
+
+## 已知合约代码(或接口)和地址的情况下调用其他合约的函数
+1. 传入目标合约地址，生成目标合约的引用，然后调用目标函数
+
+
+## call
+call是address类型的低级成员函数，用来与其他合约交互.
+- 返回值(bool, data)
+- call是solidity官方推荐的通过触发fallback或receive函数发送ETH的方法.
+- 
