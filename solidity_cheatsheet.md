@@ -204,4 +204,20 @@ transfer(), send(), call() 其中call()是被鼓励的用法.
 call是address类型的低级成员函数，用来与其他合约交互.
 - 返回值(bool, data)
 - call是solidity官方推荐的通过触发fallback或receive函数发送ETH的方法.
-- 
+- 目标合约地址.call(二进制编码)
+二进制编码: abi.encodeWithSignature('函数签名'， 逗号分隔的具体参数.)
+
+abi.encodeWithSignature("f(uint256,address)", _x, _addr)
+
+目标合约地址.call{value:发送数额, gas:gas数额}(二进制编码);
+
+## delegatecall
+- 用户A通过合约B来delegate call合约C的时候，执行的是合约C的函数，context也是合约B的,msg.sender是A的地址，并且如果函数改变一些状态变量，产生的效果会作用域合约B的变量上。
+- delegatecall在调用合约时可以指定交易发送的gas, 但不能指定发送的ETH数额。
+
+应用场景:
+1. 代理合约 proxy contract.
+
+## 合约中创建合约
+create和create2.
+Contract x = new Contract{value: _value}(params)
